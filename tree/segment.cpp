@@ -42,3 +42,47 @@ struct st {
 };
 
 
+
+#include<bits/stdc++.h>
+#include<ext/pb_ds/assoc_container.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+template <typename T> using indexed_multiset = 
+    tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+const int N = 2e5 + 10;
+indexed_multiset<int> Tree[4 * N];
+int lst[N];
+void MargeNode(indexed_multiset<int> & a, indexed_multiset<int> & b, indexed_multiset<int> & c) {
+    for (auto & child : b) a.insert(child);
+    for (auto & child : c) a.insert(child);
+}
+void BuildTree (int ind, int l, int r) {
+    if (l == r) {
+        Tree[ind].insert(lst[l]);
+        return;
+    }
+    int mid = (l + r) >> 1;
+    BuildTree(2 * ind, l, mid);
+    BuildTree(2 * ind + 1, mid + 1, r);
+    MargeNode(Tree[ind], Tree[2 * ind], Tree[2 * ind + 1]);
+}
+int query(int ind, int l, int r, int l1, int r1, int value) {
+    if(l1<=l && r<=r1) 
+        return Tree[ind].order_of_key(value);
+    if(r1<l || l1>r) return 0; 
+    int m=(l+r)/2;
+    return (query(2*ind,l,m,l1,r1,value) +  query(2*ind+1,m+1,r,l1,r1,value));
+} 
+int main(int argc, char const *argv[])
+{
+    int n; cin >> n;
+    for (int i = 0; i < n; i++) cin >> lst[i];
+    BuildTree(1, 0, n - 1);
+    int q; cin >> q;
+    while (q--) {
+        int l, r, val; cin >> l >> r >> val;
+        cout << query(1, 0, n - 1, l, r, val) << endl;
+    }
+    return 0;
+}
+
