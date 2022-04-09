@@ -29,3 +29,10 @@ template<typename T> using indexed_set =
 template<typename T> using indexed_multiset = 
     tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
+#include<bits/stdc++.h>
+#include<ext/pb_ds/assoc_container.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+template <typename T> using indexed_multiset = 
+    tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+    
