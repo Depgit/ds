@@ -8,7 +8,7 @@ private:
     Function func;
     vector<T> tree, lazy;
     void push(int v){
-        if(lazy[v]) return;
+        if(lazy[v]==0) return;
         tree[2*v+1] = lazy[v];
         lazy[2*v+1] = lazy[v];
         tree[2*v+2] = lazy[v];
