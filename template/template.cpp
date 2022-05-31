@@ -41,7 +41,7 @@ function<bool(int)> dfs = [&](int u)->bool{
 };
 
 struct comp{
-    bool operator()(vl &a,vl &b){
+    bool operator()(const vl &a,const vl &b){
         return a[0]==b[0]?a[1]<b[1]:a[0]>b[0];
     }
 };
