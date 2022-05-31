@@ -39,3 +39,9 @@ template <typename T> using indexed_multiset =
 function<bool(int)> dfs = [&](int u)->bool{
     
 };
+
+struct comp{
+    bool operator()(vl &a,vl &b){
+        return a[0]==b[0]?a[1]<b[1]:a[0]>b[0];
+    }
+};
