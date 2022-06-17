@@ -43,6 +43,55 @@ struct st {
 
 
 
+
+template <typename T, class Function = function<T(const T &, const T &)>>
+class SegmentTree {
+private:
+    int N;
+    Function func;
+    vector<T> tree;
+    void _build(vector<T>& arr, int v, int l, int r){
+        if(l==r) return void(tree[v] = arr[l]);
+        int mid = (l+r)/2;
+        _build(arr, 2*v+1, l, mid); _build(arr, 2*v+2, mid+1, r);
+        tree[v] = func(tree[2*v+1], tree[2*v+2]);
+    }
+    T _query(int v, int l, int r, int i, int j){
+        if(i>r || j<l) return 1e15;  // no overlap
+        if(i<=l && r<=j) return tree[v];   // complete overlap
+        int mid = (l+r)/2;
+        T left = _query(2*v+1, l, mid, i, j);
+        T right = _query(2*v+2, mid+1, r, i, j);
+        return func(left, right);
+    }
+    void _update(int v, int l, int r, int i, T val){
+        if(i>r || i<l) return; // no overlap
+        if(l==r) return void(tree[v] = val);  // l == i  and i == r;
+        int mid = (l+r)/2;
+        _update(2*v+1, l, mid, i, val);
+        _update(2*v+2, mid+1, r, i, val);
+        tree[v] = func(tree[2*v+1], tree[2*v+2]);
+    }
+public:
+    SegmentTree(vector<T>& ar, const Function& f) : func(f) {
+        N = ar.size();
+        tree.assign(4*N, 0);
+        _build(ar, 0, 0, N-1);
+    }
+    SegmentTree(int n, const Function& f) : N(n), func(f) {
+        vector<T> ar(N, 1e15);
+        tree.assign(4*N, 0);
+        _build(ar, 0, 0, N-1);
+    }
+    T query(int i, int j){ return _query(0, 0, N-1, i, j); }
+    void update(int i, T val){ _update(0, 0, N-1, i, val); }
+};
+
+
+
+
+
+
 #include<bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 using namespace std;
